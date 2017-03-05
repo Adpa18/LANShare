@@ -1,39 +1,33 @@
 package API
 
 import (
-	"net/http"
 	"os"
 	"io"
-	"log"
 	"path/filepath"
+	"log"
+	"errors"
 )
 
-func upload(folder string, w http.ResponseWriter, r *http.Request) {
-	if folder == "" {
-		http.Error(w, "No directory selected", http.StatusForbidden)
-		return
+func upload(path string, filename string, src io.Reader) error {
+	if path == "" {
+		return errors.New("No directory selected")
 	}
-	path := getFullPath(folder)
+	fullPath := getFullPath(path)
 
-	_, err := os.Stat(path)
+	_, err := os.Stat(fullPath)
 	if err != nil {
-		http.Error(w, "Cannot find the folder", http.StatusNotFound)
-		return
+		return errors.New("Cannot find the folder")
 	}
 
-	r.ParseMultipartForm(32 << 20)
-	file, handler, err := r.FormFile("uploadFile")
+	outFile, err := os.OpenFile(filepath.Join(fullPath, filename), os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
-		return
+		return err
 	}
-	defer file.Close()
-	f, err := os.OpenFile(filepath.Join(path, handler.Filename), os.O_WRONLY|os.O_CREATE, 0666)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	defer f.Close()
-	io.Copy(f, file)
-	w.WriteHeader(200)
+	defer outFile.Close()
+
+	log.Printf("Uploading %s in %s\n", filename, fullPath)
+
+	io.Copy(outFile, src)
+	return nil
 }

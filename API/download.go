@@ -1,61 +1,29 @@
 package API
 
 import (
-	"net/http"
 	"os"
-	"encoding/json"
-	"github.com/pierrre/archivefile/zip"
-	"io/ioutil"
+	"errors"
 )
 
 type Download struct {
-	Name string `json:"name"`
-	Path string `json:"path"`
+	Name  string `json:"name"`
+	Path  string `json:"path"`
+	isZip bool
 }
 
-func download(folder string, w http.ResponseWriter, r *http.Request) {
-	if folder == "" {
-		http.Error(w, "No directory selected", http.StatusForbidden)
-		return
+func download(path string) (Download, error) {
+	if path == "" {
+		return Download{}, errors.New("No directory selected")
 	}
-	path := getFullPath(folder)
+	fullPath := getFullPath(path)
 
-	info, err := os.Stat(path)
+	info, err := os.Stat(fullPath)
 	if err != nil {
-		http.Error(w, "Cannot find the ressource", http.StatusNotFound)
-		return
+		return Download{}, errors.New("Cannot find the ressource")
 	}
 
 	if !info.IsDir() {
-		w.Header().Set("Content-Disposition", "attachment; filename="+info.Name())
-		w.Header().Set("Content-Type", "application/octet-stream")
-		http.ServeFile(w, r, path)
-		return
+		return Download{info.Name(), fullPath, false}, nil
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-
-	filename := getZip(folder, path, info.Name())
-
-	json.NewEncoder(w).Encode(Download{folder, filename})
-}
-
-func getZip(folder, path, name string) string {
-	for token, val := range zips {
-		if val.From == folder {
-			return token
-		}
-	}
-
-	token, err := GenerateRandomString(64)
-
-	tmpFile, err := ioutil.TempFile(os.TempDir(), token + ".zip")
-
-	err = zip.Archive(path, tmpFile, nil)
-	if err != nil {
-		panic(err)
-	}
-
-	zips[token] = ZipFile{tmpFile, name + ".zip", folder, token}
-	return token
+	return Download{path, genZip(path, fullPath, info.Name()), true}, nil
 }

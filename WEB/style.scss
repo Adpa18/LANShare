@@ -1,0 +1,82 @@
+$background: #757575;
+$background_white: #FAFAFA;
+$colorBlue: #60a7dc;
+$size: 100px;
+
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+html, body {
+  height: 100%;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+html {
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column;
+}
+
+.path {
+  font-size: 1.5rem;
+  padding: 20px;
+  .directory {
+    color: $background;
+    text-decoration: none;
+    &:hover {
+      color: lighten($background, 30%);
+    }
+  }
+  .separator {
+    color: lighten($background, 20%);
+  }
+}
+
+.files {
+  padding: 20px;
+  .item {
+    position: relative;
+    outline: none;
+    display: inline-block;
+    width: $size;
+    height: $size;
+    background-size: 50% 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: $size/10;
+    text-align: center;
+    &.folder {
+      background-image: url("icons/folder.svg");
+    }
+    &.file {
+      background-image: url("icons/file.svg");
+    }
+    &.hide {
+      opacity: 0.7;
+    }
+    &:hover {
+      background-color: lighten($background, 30%);
+      cursor: pointer;
+    }
+    &.selected {
+      background-color: lighten($background, 25%);
+    }
+    .filename {
+      color: $background;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip;
+    }
+  }
+}

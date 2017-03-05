@@ -4,6 +4,8 @@ import (
 	"strings"
 	"strconv"
 	"path"
+	"log"
+	"os"
 )
 
 var Directories = make(map[string]string, 0)
@@ -18,6 +20,12 @@ func AddDirectory(folder string) {
 		if dir == folder {
 			return
 		}
+	}
+
+	_, err := os.Stat(folder)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
 	dirs := strings.Split(folder, "/")

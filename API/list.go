@@ -1,9 +1,9 @@
 package API
 
 import (
-	"net/http"
-	"encoding/json"
 	"io/ioutil"
+	"errors"
+	"os"
 )
 
 type Directory struct {
@@ -16,26 +16,31 @@ type File struct {
 	IsDir bool `json:"is_dir"`
 }
 
+func listRoot() Directory {
+	ret := Directory{"Root", make([]File, len(Directories))}
 
-func list(folder string, w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	if folder == "" {
-		json.NewEncoder(w).Encode(Directories)
-		return
+	i := 0
+	for key := range Directories {
+		ret.Files[i] = File{key, true}
+		i++
 	}
+	return ret
+}
 
-	directory := getFullPath(folder)
+func list(path string) (Directory, error) {
+	directory := getFullPath(path)
+
+	info, err := os.Stat(directory)
+	if err != nil || !info.IsDir() {
+		return Directory{}, errors.New(directory + " : Cannot find Direcotory")
+	}
 
 	files, err := ioutil.ReadDir(directory)
-	if err != nil {
-		http.Error(w, "Cannot find Direcotory", http.StatusNotFound)
-		return
-	}
 
-	ret := Directory{folder, make([]File, 0)}
+	ret := Directory{path, make([]File, 0)}
 
 	for _, file := range files {
 		ret.Files = append(ret.Files, File{file.Name(), file.IsDir()})
 	}
-	json.NewEncoder(w).Encode(ret)
+	return ret, nil
 }

@@ -1,0 +1,45 @@
+{{define "home" }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href="/public">
+    <link rel="stylesheet" href="/public/style.css">
+    <title>LANShare</title>
+</head>
+<body>
+
+{{template "contextMenu.html"}}
+
+{{$name := .Name}}
+<span class="path">
+     <a href="/" class="directory">Root</a>
+    {{if ne $name "Root"}}
+        {{range $dir := .SplitPath $name}}
+            <span class="separator"> > </span>
+            <a href="{{$dir.URL}}" class="directory">{{$dir.Name}}</a>
+        {{end}}
+    {{end}}
+</span>
+<div id="files" class="files">
+    {{range $file := .Files}}
+    <a {{if $file.IsDir}} href="{{$file.GetURL $name}}" {{end}} class="{{$file.GetClass }}"
+       data-url="{{$file.GetURL $name}}">
+            <span class="filename">
+              {{$file.Name}}
+            </span>
+    </a>
+    {{end}}
+</div>
+
+{{template "dropzone.html"}}
+
+</body>
+<script type="application/javascript">
+    var path = {{$name}};
+</script>
+<script type="application/javascript" src="/public/script.js"></script>
+{{template "contextMenu.js"}}
+{{template "dropzone.js"}}
+</html>
+{{end}}

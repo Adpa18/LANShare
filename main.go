@@ -7,6 +7,9 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"log"
+	"net/http"
+	"strconv"
 )
 
 const (
@@ -25,10 +28,13 @@ func getDirectory() string {
 
 func main() {
 	API.AddDirectory(getDirectory())
+	API.AddDirectory("/Users")
 
 	catchSignal(API.Clean)
 
-	API.Run(defaultPort)
+	router := API.NewRouter()
+
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(defaultPort), router))
 
 }
 

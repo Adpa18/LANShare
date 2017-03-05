@@ -1,0 +1,14 @@
+{{define "dropzone.html"}}
+<div id="dropzone" class="dropzone">
+    <div id="inner" class="inner">
+        <img src="/public/icons/upload.svg">
+        <div class="txt">Déplacez ici vos fichiers</div>
+        <div class="comment">ou cliquer pour ajouter vos fichiers</div>
+        <input id="fileInput" type="file" multiple style="display: none;">
+    </div>
+</div>
+{{end}}
+
+{{define "dropzone.js"}}
+<script type="application/javascript" src="/public/scripts/dropzone.js"></script>
+{{end}}
