@@ -116,8 +116,6 @@
         document.addEventListener( "contextmenu", function(e) {
             taskItemInContext = clickInsideElement( e, taskItemClassName );
 
-            console.log(taskItemInContext);
-
             if ( taskItemInContext ) {
                 e.preventDefault();
                 toggleMenuOn();
@@ -224,7 +222,6 @@
      * @param {HTMLElement} link The link that was clicked
      */
     function menuItemListener( link ) {
-        console.log( "Task ID - " + taskItemInContext.getAttribute("data-id") + ", Task action - " + link.getAttribute("data-action"));
         toggleMenuOff();
     }
 

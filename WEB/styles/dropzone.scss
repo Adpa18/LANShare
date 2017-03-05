@@ -35,3 +35,45 @@
     }
   }
 }
+
+$percentageSize: 50px;
+
+.progressBar {
+  width: 100%;
+  height: 20px;
+  transition: height 1s;
+  background: lighten($colorBlue, 30%);
+  color: #FAFAFA;
+  position: relative;
+  .contentBar {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    .bar {
+      width: 0%;
+      height: 100%;
+      background: $colorBlue;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+    .filename {
+      position: absolute;
+      left: 10px;
+      top: 0;
+    }
+  }
+  .percentage {
+    position: absolute;
+    right: 0;
+    top: 0;
+    text-align: center;
+    float: right;
+    width: $percentageSize;
+    height: 100%;
+    background: $colorBlue;
+    border-left: 1px solid white;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+  }
+}

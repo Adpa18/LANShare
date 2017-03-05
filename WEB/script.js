@@ -36,5 +36,4 @@ function updatesFiles(files) {
         a.appendChild(span);
         dom.appendChild(a);
     }
-    console.log(dom);
 }

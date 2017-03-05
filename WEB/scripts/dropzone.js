@@ -7,7 +7,6 @@
 
     var dropZone = document.getElementById("dropzone");
 
-
     var inner = document.getElementById("inner");
     var inputFile = document.getElementById("fileInput");
 
@@ -51,12 +50,15 @@
     dropZone.addEventListener("drop", handleDrop);
 
     inner.addEventListener("click", function (e) {
-       inputFile.click();
+        inputFile.click();
     });
 
     inputFile.addEventListener("change", function (e) {
         uploadFiles(e);
     });
+
+    var progressBar = document.getElementById("progressBar");
+    var progresses = {};
 
     function uploadFiles(e) {
         var files = e.target.files || e.dataTransfer.files;
@@ -74,14 +76,60 @@
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
 
+
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log(this.responseText);
                 updateDirectory();
             }
         });
+        {
+            var id = Math.random();
+
+            addProgressBar(id, file.name);
+            xhr.upload.onprogress = function (e) {
+                var percentage = Math.ceil((e.loaded / e.total ) * 100) + "%"
+                console.log(percentage);
+                progresses[id]["percentage"].innerText = percentage;
+                progresses[id]["bar"].style.width = percentage;
+            };
+        }
+
 
         xhr.open("POST", pathJoin("/api/upload", to));
         xhr.send(data);
+    }
+
+    function addProgressBar(id, filename) {
+        var divRoot = document.createElement("div");
+        divRoot.className = "progressBar";
+
+        var divContent = document.createElement("div");
+        divContent.className = "contentBar";
+
+        var divBar = document.createElement("div");
+        divBar.className = "bar";
+        divContent.appendChild(divBar);
+
+        var spanFilename = document.createElement("span");
+        spanFilename.className = "filename";
+        divContent.appendChild(spanFilename);
+
+        divRoot.appendChild(divContent);
+
+        var divPercentage = document.createElement("div");
+        divPercentage.className = "percentage";
+
+        spanFilename.innerText = filename;
+        divPercentage.innerText = 0 + "%";
+
+        divRoot.appendChild(divPercentage);
+
+        progressBar.appendChild(divRoot);
+
+        progresses[id] = {
+            "root": divRoot,
+            "bar": divBar,
+            "percentage": divPercentage
+        };
     }
 })();
