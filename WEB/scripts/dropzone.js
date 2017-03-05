@@ -67,6 +67,7 @@
         for (var i = 0, f; f = files[i]; i++) {
             uploadFile(f, path);
         }
+        inputFile.value = null;
     }
 
     function uploadFile(file, to) {
@@ -76,19 +77,28 @@
         var xhr = new XMLHttpRequest();
         xhr.withCredentials = true;
 
-
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                updateDirectory();
-            }
-        });
         {
             var id = Math.random();
 
             addProgressBar(id, file.name);
+            xhr.addEventListener("readystatechange", function () {
+                if (this.readyState === 4) {
+                    setTimeout(function () {
+                        var elem = progresses[id]["root"];
+                        elem.style.width = 0;
+                        elem.style.left = "100%";
+                        elem.style.borderRadius = "10px";
+                        progresses[id]["bar"].style.borderRadius = "10px";
+                        setTimeout(function () {
+                            elem.parentNode.removeChild(elem);
+                            delete progresses[id];
+                        }, 4000);
+                    }, 500);
+                    updateDirectory();
+                }
+            });
             xhr.upload.onprogress = function (e) {
                 var percentage = Math.ceil((e.loaded / e.total ) * 100) + "%"
-                console.log(percentage);
                 progresses[id]["percentage"].innerText = percentage;
                 progresses[id]["bar"].style.width = percentage;
             };

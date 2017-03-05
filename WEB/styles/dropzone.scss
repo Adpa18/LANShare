@@ -40,8 +40,9 @@ $percentageSize: 50px;
 
 .progressBar {
   width: 100%;
+  left: 0;
   height: 20px;
-  transition: height 1s;
+  transition: all 5s;
   background: lighten($colorBlue, 30%);
   color: #FAFAFA;
   position: relative;
@@ -51,7 +52,7 @@ $percentageSize: 50px;
     height: 100%;
     display: inline-block;
     .bar {
-      width: 0%;
+      width: 0;
       height: 100%;
       background: $colorBlue;
       border-top-right-radius: 10px;

@@ -118,8 +118,9 @@ body {
 
 .progressBar {
   width: 100%;
+  left: 0;
   height: 20px;
-  transition: height 1s;
+  transition: all 5s;
   background: #ddecf8;
   color: #FAFAFA;
   position: relative; }
@@ -129,7 +130,7 @@ body {
     height: 100%;
     display: inline-block; }
     .progressBar .contentBar .bar {
-      width: 0%;
+      width: 0;
       height: 100%;
       background: #60a7dc;
       border-top-right-radius: 10px;
