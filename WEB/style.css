@@ -1,0 +1,117 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+html, body {
+  height: 100%;
+  margin: 0;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; }
+
+html {
+  font-family: 'Roboto', sans-serif; }
+
+body {
+  background: #FAFAFA;
+  display: flex;
+  flex-direction: column; }
+
+.path {
+  font-size: 1.5rem;
+  padding: 20px; }
+  .path .directory {
+    color: #757575;
+    text-decoration: none; }
+    .path .directory:hover {
+      color: #c2c2c2; }
+  .path .separator {
+    color: #a8a8a8; }
+
+.files {
+  padding: 20px; }
+  .files .item {
+    position: relative;
+    outline: none;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    background-size: 50% 50%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+    text-align: center; }
+    .files .item.folder {
+      background-image: url("icons/folder.svg"); }
+    .files .item.file {
+      background-image: url("icons/file.svg"); }
+    .files .item.hide {
+      opacity: 0.7; }
+    .files .item:hover {
+      background-color: #c2c2c2;
+      cursor: pointer; }
+    .files .item.selected {
+      background-color: #b5b5b5; }
+    .files .item .filename {
+      color: #757575;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: clip; }
+
+.context-menu {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  padding: 12px 0;
+  width: 240px;
+  background-color: #FAFAFA;
+  box-shadow: 1px 1px 2px #757575; }
+  .context-menu.context-menu--active {
+    display: block; }
+  .context-menu .context-menu__items {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+    .context-menu .context-menu__items .context-menu__item {
+      display: block;
+      margin-bottom: 4px; }
+      .context-menu .context-menu__items .context-menu__item:last-child {
+        margin-bottom: 0; }
+      .context-menu .context-menu__items .context-menu__item .context-menu__link {
+        display: block;
+        padding: 4px 12px;
+        color: #757575;
+        text-decoration: none; }
+        .context-menu .context-menu__items .context-menu__item .context-menu__link:hover {
+          color: #fff;
+          background-color: #c2c2c2; }
+
+.dropzone {
+  min-height: 300px;
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+  flex: 1;
+  text-align: center; }
+  .dropzone.active {
+    background: rgba(96, 167, 220, 0.8);
+    border: 11px dashed #60a7dc; }
+  .dropzone .inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: opacity, 1s;
+    cursor: pointer; }
+    .dropzone .inner:hover {
+      opacity: 0.2; }
+    .dropzone .inner img {
+      width: 100px;
+      height: 100px; }
+    .dropzone .inner .txt {
+      color: #757575;
+      font-size: 2rem; }
+    .dropzone .inner .comment {
+      color: #c2c2c2; }
