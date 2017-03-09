@@ -6,6 +6,7 @@ import (
 	"path"
 	"log"
 	"os"
+	"errors"
 )
 
 var Directories = make(map[string]string, 0)
@@ -15,17 +16,16 @@ type Dir struct {
 	AbsDirectory string `json:"abs_directory"`
 }
 
-func AddDirectory(folder string) {
+func AddDirectory(folder string) error {
 	for _, dir := range Directories {
 		if dir == folder {
-			return
+			return errors.New("Folder already exist")
 		}
 	}
 
 	_, err := os.Stat(folder)
 	if err != nil {
-		log.Println(err)
-		return
+		return err
 	}
 
 	dirs := strings.Split(folder, "/")
@@ -34,18 +34,20 @@ func AddDirectory(folder string) {
 
 	if _, ok := Directories[name]; !ok {
 		Directories[name] = folder
-		return
-	}
-
-	i := 0
-	for ; ; {
-		i++
-		newName := name + "_" + strconv.Itoa(i)
-		if _, ok := Directories[newName]; !ok {
-			Directories[newName] = folder
-			return
+	} else {
+		i := 0
+		for {
+			i++
+			newName := name + "_" + strconv.Itoa(i)
+			if _, ok := Directories[newName]; !ok {
+				Directories[newName] = folder
+				break
+			}
 		}
 	}
+
+	log.Printf("Adding Directory : %s\n", folder)
+	return nil
 }
 
 func getAbsDirectoryByRoot(root string) string {
