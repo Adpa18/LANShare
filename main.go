@@ -43,7 +43,6 @@ func main() {
 	runTCPServer()
 
 	PrintErr(API.AddDirectory(getDirectory()))
-	PrintErr(API.AddDirectory("/Users"))
 
 	catchSignal(API.Clean)
 
