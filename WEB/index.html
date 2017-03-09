@@ -32,8 +32,9 @@
     </a>
     {{end}}
 </div>
-
-{{template "dropzone.html"}}
+{{if ne $name "Root"}}
+    {{template "dropzone.html"}}
+{{end}}
 
 </body>
 <script type="application/javascript">
@@ -41,6 +42,8 @@
 </script>
 <script type="application/javascript" src="/public/script.js"></script>
 {{template "contextMenu.js"}}
-{{template "dropzone.js"}}
+{{if ne $name "Root"}}
+    {{template "dropzone.js"}}
+{{end}}
 </html>
 {{end}}
